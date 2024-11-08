@@ -17,11 +17,8 @@ const Quiz: React.FC = () => {
     selectedAnswer: null,  // Initialize the selected answer.
   });
   
-
   const handleOptionSelect = (option: string): void => {
     setState((prevState) => ({ ...prevState, selectedAnswer: option }));
-    //selectedAnswer = option;
-    console.log("omg");
   }
   const core: QuizCore = new QuizCore();
 
