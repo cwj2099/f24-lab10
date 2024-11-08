@@ -5,30 +5,42 @@ import QuizCore from '../core/QuizCore';
 // Hint: Take advantage of the QuizQuestion interface
 
 interface QuizState {
-  selectedAnswer: string | null
+  currentQuestion: QuizQuestion | null,
+  selectedAnswer: string | null,
+  core: QuizCore
 }
 
 const Quiz: React.FC = () => {
   // TODO: Task1 - Seprate the logic of quiz from the UI.
   // Hint: Take advantage of QuizCore to manage quiz state separately from the UI.
-  
-  
+  //const core: QuizCore =  new QuizCore();
   const [state, setState] = useState<QuizState>({
     selectedAnswer: null,  // Initialize the selected answer.
+    core: new QuizCore(),
+    currentQuestion: null,
   });
   
   const handleOptionSelect = (option: string): void => {
     setState((prevState) => ({ ...prevState, selectedAnswer: option }));
   }
-  const core: QuizCore = new QuizCore();
 
   const handleButtonClick = (): void => {
     // TODO: Task3 - Implement the logic for button click ("Next Question" and "Submit").
     // Hint: You might want to check for a function in the core logic to help with this.
+    core.answerQuestion(selectedAnswer ?? "");
+    core.nextQuestion();
+    setState((prevState) => ({ ...prevState, currentQuestion: core.getCurrentQuestion() }));
   } 
 
-  const { selectedAnswer} = state;
-  const currentQuestion = core.getCurrentQuestion();
+  const { selectedAnswer, currentQuestion, core} = state;
+
+  //Chatgpt generated this
+  React.useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      currentQuestion: prevState.core.getCurrentQuestion(),
+    }));
+  }, []);
 
   if (!currentQuestion) {
     return (
